@@ -17,7 +17,7 @@ const PARTY_DATE = "2026-10-15T18:00:00+03:30";
 /* Scene 7 — party details. Leave dressCode "" to hide that row. */
 const PARTY_INFO = {
   title: "جشن تولد نام تو",
-  date: "جمعه  23 مهر1405",
+  date: "پنجشنبه  23 مهر1405",
   time: "ساعت 17:۰۰",
   location: "قنات کوثر کوچه سوم غربی پلاک 29",
   dressCode: "لباس آبی ✦",
