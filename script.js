@@ -1,7 +1,7 @@
 "use strict";
 
 /* Who is celebrating (shown at the end) */
-const HOST_NAME = "روژان";
+const HOST_NAME = "";
 
 /* Number printed on the letter: "INVITATION No. 23" */
 const INVITATION_NO = 25;
