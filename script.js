@@ -18,11 +18,11 @@ const PARTY_DATE = "2026-10-15T18:00:00+03:30";
 
 /* Scene 7 — party details. Leave dressCode "" to hide that row. */
 const PARTY_INFO = {
-  title: "جشن تولد نام تو",
+  title: "جشن تولد روژان",
   date: "پنجشنبه  23 مهر1405",
   time: "ساعت 17:۰۰",
   location: "قنات کوثر کوچه سوم غربی پلاک 29",
-  dressCode: "لباس آبی ✦",
+  dressCode: "لباس آبی - سفید ✦",
   mapUrl: "",   // e.g. "https://maps.google.com/?q=..." — leave "" to hide the button
   rsvpUrl: ""   // e.g. "https://wa.me/98912xxxxxxx" or "https://t.me/username" — "" hides it
 };
@@ -726,7 +726,10 @@ const Uploader = (() => {
   const params = new URLSearchParams(window.location.search);
   const IS_LOCAL = (["localhost", "127.0.0.1", "[::1]", ""].includes(window.location.hostname) || /^192\.168\./.test(window.location.hostname))
     && !params.has("realupload");   // locally we only simulate; on the real site it truly sends
-  let mem = null, isOpen = false, allSent = false, onChange = () => {};
+  let mem = null, isOpen = false, allSent = false, onChange = () => {};const SENT_KEY = "bday-sent:" + (GUEST ? GUEST.toLowerCase() : "anon");
+try { if (params.has("reset")) localStorage.removeItem(SENT_KEY); } catch (e) {}
+const wasSent = () => { try { return localStorage.getItem(SENT_KEY) === "1"; } catch (e) { return false; } };
+let mem = null, isOpen = false, allSent = wasSent(), onChange = () => {};
   let photo = null, voice = null, urls = [], rec = null, stream = null, recTimer = 0, recStart = 0, chunks = [];
 
   const safe = (t) => String(t).replace(/[^\p{L}\p{N}_-]+/gu, "_").slice(0, 30) || "x";
@@ -877,8 +880,9 @@ const Uploader = (() => {
         clearTimeout(to);
         if (!res.ok) throw new Error("HTTP " + res.status);
       }
-      allSent = true; return true;
-    } catch (e) { return false; }
+allSent = true;
+try { localStorage.setItem(SENT_KEY, "1"); } catch (e) {}
+return true;    } catch (e) { return false; }
   }
 
   return {
@@ -906,6 +910,7 @@ const Uploader = (() => {
     },
     /* Has the guest left enough answers to continue? */
     ready() {
+        if (allSent) return true;
       if (!UPLOADS.enabled || !MEMORIES.some((m) => m.ask)) return true;
       return [...drafts.values()].filter(qualifies).length >= UPLOADS.minRequired;
     },
