@@ -726,7 +726,7 @@ const Uploader = (() => {
   const params = new URLSearchParams(window.location.search);
   const IS_LOCAL = (["localhost", "127.0.0.1", "[::1]", ""].includes(window.location.hostname) || /^192\.168\./.test(window.location.hostname))
     && !params.has("realupload");   // locally we only simulate; on the real site it truly sends
-  let mem = null, isOpen = false, allSent = false, onChange = () => {};const SENT_KEY = "bday-sent:" + (GUEST ? GUEST.toLowerCase() : "anon");
+  const SENT_KEY = "bday-sent:" + (GUEST ? GUEST.toLowerCase() : "anon");
 try { if (params.has("reset")) localStorage.removeItem(SENT_KEY); } catch (e) {}
 const wasSent = () => { try { return localStorage.getItem(SENT_KEY) === "1"; } catch (e) { return false; } };
 let mem = null, isOpen = false, allSent = wasSent(), onChange = () => {};
